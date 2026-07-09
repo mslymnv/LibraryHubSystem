@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Year;
 
-import static az.company.books.model.constants.ApplicationConstants.*;
+import static az.company.books.exception.constants.ApplicationConstants.*;
 
 @Data
 @NoArgsConstructor

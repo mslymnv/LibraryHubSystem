@@ -1,4 +1,4 @@
-package az.company.books.model.constants;
+package az.company.books.exception.constants;
 
 
 import lombok.AccessLevel;
@@ -16,4 +16,6 @@ public class ApplicationConstants {
     public static final String Book_Category_Id_Required = "Book category ID cannot be null";
     public static final String Book_Id_Required = "Book ID cannot be null";
     public static final String Book_Status_Required = "Book status cannot be null";
+    public static final String User_Id_Required = "User ID cannot be null";
+
 }

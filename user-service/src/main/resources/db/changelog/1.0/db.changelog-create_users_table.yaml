@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 07062026
+      id: 09072026
       author: Memmed Suleyman
       changes:
         - createTable:
@@ -15,13 +15,13 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: username
-                  type: VARCHAR(50)
+                  type: VARCHAR(100)
                   constraints:
                     nullable: false
                     unique: true
               - column:
                   name: email
-                  type: VARCHAR(100)
+                  type: VARCHAR(150)
                   constraints:
                     nullable: false
                     unique: true
@@ -32,17 +32,10 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: full_name
-                  type: VARCHAR(100)
-                  constraints:
-                    nullable: true
-              - column:
-                  name: role
-                  type: VARCHAR(20)
-                  constraints:
-                    nullable: false
+                  type: VARCHAR(255)
               - column:
                   name: status
-                  type: VARCHAR(20)
+                  type: VARCHAR(50)
                   constraints:
                     nullable: false
               - column:
@@ -53,5 +46,24 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   type: TIMESTAMP
+
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
                   constraints:
-                    nullable: true
+                    nullable: false
+              - column:
+                  name: role
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: user_roles
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_user_roles_users

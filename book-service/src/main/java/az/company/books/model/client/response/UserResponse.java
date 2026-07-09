@@ -1,6 +1,5 @@
-package az.company.users.model.response;
+package az.company.books.model.client.response;
 
-import az.company.users.model.enums.UserRoles;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

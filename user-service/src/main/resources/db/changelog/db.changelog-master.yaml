@@ -1,3 +1,5 @@
 databaseChangeLog:
     - include:
         file: db/changelog/1.0/db.changelog-create_users_table.yaml
+    - include:
+          file: db/changelog/1.0/db.changelog-create_borrow_history_table.yaml

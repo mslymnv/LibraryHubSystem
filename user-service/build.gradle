@@ -53,6 +53,12 @@ dependencies {  //spring boot
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+    //rabbitmq
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.amqp:spring-rabbit-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 dependencyManagement {
     imports {

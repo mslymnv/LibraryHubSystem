@@ -1,4 +1,4 @@
-package az.company.books.exception;
+package az.company.users.exception;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,37 +11,41 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(NOT_FOUND)
-    public ErrorResponse handleException(NotFoundException exception) {
-        return ErrorResponse.builder()
-                .code(exception.getCode())
-                .message(exception.getMessage())
-                .build();
-    }
     @ExceptionHandler(Exception.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(Exception exception) {
-        return ErrorResponse.builder()
-                .code("Internal Error")
+        return ErrorResponse
+                .builder()
+                .code("INTERNAL ERROR")
                 .message(exception.getMessage())
                 .build();
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ErrorResponse handleException(MethodArgumentNotValidException exception) {
+    public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         return ErrorResponse.builder()
-                .code("Validation Error")
+                .code("BAD_REQUEST")
                 .message(Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage())
                 .build();
     }
-    @ExceptionHandler(ConflictException.class)
-    @ResponseStatus(CONFLICT)
-    public ErrorResponse handleException(ConflictException exception) {
-        return ErrorResponse
-                .builder()
+
+    @ExceptionHandler(UserPresentException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ErrorResponse handleUserPresentException(UserPresentException exception) {
+        return ErrorResponse.builder()
                 .code(exception.getCode())
                 .message(exception.getMessage())
                 .build();
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(NOT_FOUND)
+    public ErrorResponse handleNotFoundException(NotFoundException exception) {
+        return ErrorResponse.builder()
+                .code(exception.getCode())
+                .message(exception.getMessage())
+                .build();
+    }
+
 }
