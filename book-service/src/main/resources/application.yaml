@@ -2,7 +2,7 @@ spring:
   application:
     name: book-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/books_db
+    url: jdbc:postgresql://localhost:5432/book_db
     username: postgres
     password: password
   liquibase:

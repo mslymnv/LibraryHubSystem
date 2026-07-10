@@ -10,6 +10,7 @@ import az.company.books.model.request.UpdateBookRequest;
 import az.company.books.model.response.BookResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,19 @@ public class BookService {
 
 
         var bookEntity = mapBookRequestToBookEntity(createBookRequest);
+        getBooksByAuthorOrTitle(createBookRequest.getAuthor(), createBookRequest.getTitle())
+                .stream()
+                .findFirst()
+                .ifPresent(
+                        bookResponse -> {
+                            throw new NotFoundException(
+                                    BOOK_ALREADY_EXISTS.name(),
+                                    BOOK_ALREADY_EXISTS.getMessage()
+
+                            );
+                        }
+                );
+
         bookEntity.setCategory(category);
         bookRepository.save(bookEntity);
         return mapBookEntityToBookResponse(bookEntity);
@@ -84,11 +98,14 @@ public class BookService {
         entity.setStatus(INACTIVE);
         bookRepository.save(entity);
     }
-    public Page<BookResponse> getBooks(Pageable pageable,Long categoryId,String author) {
-        return bookRepository.findAllBooks(pageable,categoryId,author)
+
+    public Page<BookResponse> getBooks(Pageable pageable, Long categoryId, String author) {
+        return bookRepository.findAllBooks(pageable, categoryId, author)
                 .map(BookMapper::mapBookEntityToBookResponse);
     }
-    public BookResponse  getBookById(Long id) {
+
+    @Cacheable(value = "books", key = "#id")
+    public BookResponse getBookById(Long id) {
         var entity = bookRepository.findById(id)
                 .orElseThrow(
                         () -> new NotFoundException(
@@ -98,7 +115,8 @@ public class BookService {
                 );
         return mapBookEntityToBookResponse(entity);
     }
-public List<BookResponse> getBooksByAuthorOrTitle(String author, String title) {
+
+    public List<BookResponse> getBooksByAuthorOrTitle(String author, String title) {
         return bookRepository.findAllBooksByAuthorOrTitle(author, title)
                 .stream()
                 .map(BookMapper::mapBookEntityToBookResponse)

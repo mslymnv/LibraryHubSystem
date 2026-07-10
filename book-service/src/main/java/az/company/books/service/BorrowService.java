@@ -1,7 +1,7 @@
 package az.company.books.service;
 
 import az.company.books.client.UserClient;
-import az.company.books.dao.entity.BookBorrowEntity;
+import az.company.books.dao.entity.BorrowEntity;
 import az.company.books.dao.repository.BookRepository;
 import az.company.books.dao.repository.BorrowRepository;
 import az.company.books.exception.ConflictException;
@@ -26,10 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 
 @Service
@@ -57,7 +54,7 @@ public class BorrowService {
 
         bookEntity.setAvailableCopies(bookEntity.getAvailableCopies() - 1);
         bookRepository.save(bookEntity);
-        var borrowEntity = BookBorrowEntity
+        var borrowEntity = BorrowEntity
                 .builder()
                 .userId(userResponse.getId())
                 .book(bookEntity)
@@ -122,7 +119,7 @@ public class BorrowService {
 
     // region get borrows
     public Page<BorrowResponse> getBorrows(Pageable pageable) {
-        return borrowRepository.findAll(pageable).map(
+        return borrowRepository.findAllWithBook(pageable).map(
                 BorrowMapper::mapBorrowEntityToBorrowResponse
         );
 

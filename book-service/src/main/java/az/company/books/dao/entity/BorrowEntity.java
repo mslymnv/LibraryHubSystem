@@ -1,6 +1,5 @@
 package az.company.books.dao.entity;
 
-import az.company.books.model.enums.BookStatus;
 import az.company.books.model.enums.BorrowStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +15,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookBorrowEntity {
+public class BorrowEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +37,7 @@ public class BookBorrowEntity {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        BookBorrowEntity that = (BookBorrowEntity) o;
+        BorrowEntity that = (BorrowEntity) o;
         return Objects.equals(id, that.id);
     }
 

@@ -1,10 +1,10 @@
 package az.company.books.mapper;
 
-import az.company.books.dao.entity.BookBorrowEntity;
+import az.company.books.dao.entity.BorrowEntity;
 import az.company.books.model.response.BorrowResponse;
 
 public class BorrowMapper {
-    public static BorrowResponse mapBorrowEntityToBorrowResponse(BookBorrowEntity entity){
+    public static BorrowResponse mapBorrowEntityToBorrowResponse(BorrowEntity entity){
         return BorrowResponse.builder()
                 .id(entity.getId())
                 .userId(entity.getUserId())

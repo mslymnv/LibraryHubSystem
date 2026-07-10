@@ -4,7 +4,6 @@ import az.company.books.model.enums.BookStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.List;
@@ -46,7 +45,7 @@ public class BookEntity {
     private CategoryEntity category;
 
     @OneToMany(mappedBy = "book")
-    private List<BookBorrowEntity> borrows;
+    private List<BorrowEntity> borrows;
 
     @Override
     public boolean equals(Object o) {
