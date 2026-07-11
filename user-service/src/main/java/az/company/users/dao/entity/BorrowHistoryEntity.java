@@ -4,7 +4,6 @@ import az.company.users.model.enums.BorrowStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import javax.annotation.processing.Generated;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

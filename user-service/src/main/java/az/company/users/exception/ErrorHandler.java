@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.*;
@@ -16,8 +17,10 @@ public class ErrorHandler {
     public ErrorResponse handleException(Exception exception) {
         return ErrorResponse
                 .builder()
+                .status(INTERNAL_SERVER_ERROR.value())
                 .code("INTERNAL ERROR")
                 .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
                 .build();
     }
 
@@ -25,8 +28,10 @@ public class ErrorHandler {
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         return ErrorResponse.builder()
+                .status(BAD_REQUEST.value())
                 .code("BAD_REQUEST")
                 .message(Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage())
+                .timestamp(LocalDateTime.now())
                 .build();
     }
 
@@ -34,8 +39,10 @@ public class ErrorHandler {
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse handleUserPresentException(UserPresentException exception) {
         return ErrorResponse.builder()
+                .status(BAD_REQUEST.value())
                 .code(exception.getCode())
                 .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
                 .build();
     }
 
@@ -43,8 +50,10 @@ public class ErrorHandler {
     @ResponseStatus(NOT_FOUND)
     public ErrorResponse handleNotFoundException(NotFoundException exception) {
         return ErrorResponse.builder()
+                .status(NOT_FOUND.value())
                 .code(exception.getCode())
                 .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
                 .build();
     }
 

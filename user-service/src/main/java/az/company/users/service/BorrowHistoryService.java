@@ -14,7 +14,7 @@ public class BorrowHistoryService {
     private final BorrowHistoryRepository borrowHistoryRepository;
 
     public List<BorrowHistoryResponse> getBorrowHistory(Pageable pageable) {
-        return borrowHistoryRepository.findAllWithUser(pageable)
+        return borrowHistoryRepository.findAll(pageable)
                 .stream()
                 .map(entity -> BorrowHistoryResponse.builder()
                         .id(entity.getId())

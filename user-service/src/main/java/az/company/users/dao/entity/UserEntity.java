@@ -4,8 +4,8 @@ import az.company.users.model.enums.UserRoles;
 import az.company.users.model.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -17,7 +17,9 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class UserEntity  {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -58,4 +60,6 @@ public class UserEntity {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+
 }

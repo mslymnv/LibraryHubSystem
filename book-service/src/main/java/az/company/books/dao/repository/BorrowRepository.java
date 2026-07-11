@@ -11,6 +11,7 @@ import java.util.List;
 
 
 public interface BorrowRepository extends JpaRepository<BorrowEntity,Long> {
+    @Override
 @EntityGraph(attributePaths = {"book"})
-    Page<BorrowEntity> findAllWithBook(Pageable pageable);
+    Page<BorrowEntity> findAll( Pageable pageable);
 }

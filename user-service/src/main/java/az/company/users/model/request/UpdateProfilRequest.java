@@ -12,16 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegisterRequest {
-    @NotBlank(message = USERNAME_VALIDATIION)
-    @Size(min = 3, max = 50, message = USERNAME_SIZE_VALIDATION)
-    private String username;
+public class UpdateProfilRequest {
+    @Size(max = 100, message = FULLNAME_SIZE_VALIDATION)
+    private String fullName;
     @NotBlank(message = EMAIL_VALIDATIION)
     @Email(message = EMAIL_VALIDATIION)
     private String email;
-    @NotBlank(message = PASSWORD_VALIDATIION)
-    @Size(min = 8, message = PASSWORD_SIZE_VALIDATION)
-    private String password;
-    @Size(max = 100, message = FULLNAME_SIZE_VALIDATION)
-    private String fullName;
 }

@@ -1,15 +1,12 @@
 package az.company.users.rabbit.listener;
 
-import az.company.users.config.RabbitMQConfig;
 import az.company.users.dao.entity.BorrowHistoryEntity;
 import az.company.users.dao.repository.BorrowHistoryRepository;
 import az.company.users.dao.repository.UserRepository;
 import az.company.users.exception.NotFoundException;
-import az.company.users.exception.enums.ErrorStatus;
 import az.company.users.model.dto.BorrowEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 import static az.company.users.config.RabbitMQConfig.*;

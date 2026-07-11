@@ -119,7 +119,7 @@ public class BorrowService {
 
     // region get borrows
     public Page<BorrowResponse> getBorrows(Pageable pageable) {
-        return borrowRepository.findAllWithBook(pageable).map(
+        return borrowRepository.findAll(pageable).map(
                 BorrowMapper::mapBorrowEntityToBorrowResponse
         );
 

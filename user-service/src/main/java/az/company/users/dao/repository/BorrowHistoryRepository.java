@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BorrowHistoryRepository extends JpaRepository<BorrowHistoryEntity,Long> {
     @EntityGraph(attributePaths = {"user"})
-    Page<BorrowHistoryEntity> findAllWithUser(Pageable pageable);
+    Page<BorrowHistoryEntity> findAll(Pageable pageable);
 }
