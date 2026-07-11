@@ -12,8 +12,6 @@ import static az.company.books.exception.constants.ApplicationConstants.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BorrowBookRequest {
-    @NotNull(message = User_Id_Required)
-    private Long userId;
-    @NotNull(message = Book_Id_Required)
+   @NotNull(message = Book_Id_Required)
     private Long bookId;
 }

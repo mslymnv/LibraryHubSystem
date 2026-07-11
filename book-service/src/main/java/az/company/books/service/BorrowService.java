@@ -1,6 +1,5 @@
 package az.company.books.service;
 
-import az.company.books.client.UserClient;
 import az.company.books.dao.entity.BorrowEntity;
 import az.company.books.dao.repository.BookRepository;
 import az.company.books.dao.repository.BorrowRepository;
@@ -35,12 +34,10 @@ public class BorrowService {
     private final BorrowRepository borrowRepository;
     private final BookRepository bookRepository;
     private final RabbitTemplate rabbitTemplate;
-    private final UserClient userClient;
 
     // region borrow Method
     @Transactional
-    public void borrow(BorrowBookRequest borrowBookRequest) {
-        var userResponse = userClient.getUser(borrowBookRequest.getUserId());
+    public void borrow(BorrowBookRequest borrowBookRequest,Long userId) {
         var bookEntity = bookRepository.findById(borrowBookRequest.getBookId()).orElseThrow(() -> new NotFoundException(
                 BOOK_NOT_FOUND.name(),
                 format(BOOK_NOT_FOUND.getMessage(), borrowBookRequest.getBookId())
@@ -56,7 +53,7 @@ public class BorrowService {
         bookRepository.save(bookEntity);
         var borrowEntity = BorrowEntity
                 .builder()
-                .userId(userResponse.getId())
+                .userId(userId)
                 .book(bookEntity)
                 .borrowedAt(now())
                 .dueDate(LocalDate.now().plusDays(14))

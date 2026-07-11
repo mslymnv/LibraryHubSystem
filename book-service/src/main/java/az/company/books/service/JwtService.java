@@ -1,7 +1,5 @@
-package az.company.users.service;
+package az.company.books.service;
 
-import az.company.users.dao.entity.UserEntity;
-import az.company.users.security.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -19,23 +17,12 @@ import java.util.List;
 public class JwtService {
     @Value("${jwt.secret}")
     private String key;
-    @Value("${jwt.access-token-expiration}")
-    private Long accessTokenExpiration;
 
     public SecretKey secretKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
     }
 
-    public String generateAccesToken(UserPrincipal userPrincipal) {
-        return Jwts.builder()
-                .subject(userPrincipal.getUsername())
-                .claim("roles", userPrincipal.getRoles())
-                .claim("userId", userPrincipal.getId())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + (accessTokenExpiration * 60 * 60 * 1000)))
-                .signWith(secretKey())
-                .compact();
-    }
+
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
@@ -43,6 +30,10 @@ public class JwtService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+    //extract id
+    public Long extractUserId(String token) {
+        return extractAllClaims(token).get("userId", Long.class);
     }
 
     public String extractUsername(String token) {
