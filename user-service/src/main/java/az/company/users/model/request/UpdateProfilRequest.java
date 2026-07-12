@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class UpdateProfilRequest {
     @Size(max = 100, message = FULLNAME_SIZE_VALIDATION)
     private String fullName;
-    @NotBlank(message = EMAIL_VALIDATIION)
-    @Email(message = EMAIL_VALIDATIION)
+    @NotBlank(message = EMAIL_VALIDATION)
+    @Email(message = EMAIL_VALIDATION)
     private String email;
 }

@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRegisterRequest {
-    @NotBlank(message = USERNAME_VALIDATIION)
+    @NotBlank(message = USERNAME_VALIDATION)
     @Size(min = 3, max = 50, message = USERNAME_SIZE_VALIDATION)
     private String username;
-    @NotBlank(message = EMAIL_VALIDATIION)
-    @Email(message = EMAIL_VALIDATIION)
+    @NotBlank(message = EMAIL_VALIDATION)
+    @Email(message = EMAIL_VALIDATION)
     private String email;
-    @NotBlank(message = PASSWORD_VALIDATIION)
+    @NotBlank(message = PASSWORD_VALIDATION)
     @Size(min = 8, message = PASSWORD_SIZE_VALIDATION)
     private String password;
     @Size(max = 100, message = FULLNAME_SIZE_VALIDATION)

@@ -32,7 +32,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final TokenStorageService tokenStorageService;
     private final PasswordEncoder passwordEncoder;
-@Transactional
+
+    @Transactional
     public UserResponse registerUser(UserRegisterRequest userRegisterRequest) {
         if (userRepository.findByUsername(userRegisterRequest.getUsername()).isPresent()) {
             throw new UserPresentException(
@@ -51,6 +52,7 @@ public class AuthService {
         return mapUserEntityToUserResponse(userEntity);
 
     }
+
     public LoginResponse login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -59,13 +61,12 @@ public class AuthService {
                 )
         );
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String accesToken=jwtService.generateAccesToken(userPrincipal);
-        tokenStorageService.storeAccessToken(userPrincipal.getUsername(),accesToken);
-        return  LoginResponse
+        String accesToken = jwtService.generateAccesToken(userPrincipal);
+        tokenStorageService.storeAccessToken(userPrincipal.getUsername(), accesToken);
+        return LoginResponse
                 .builder()
                 .accessToken(accesToken)
                 .build();
-
 
 
     }

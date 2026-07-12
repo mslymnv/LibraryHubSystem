@@ -26,7 +26,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setContentType("application/json");
 
         var responseBody = ErrorResponse.builder()
-                .code("UNAUTHORIZED")
+                .status(HttpServletResponse.SC_UNAUTHORIZED)
                 .message("Authentication is required to access this resource")
                 .timestamp(LocalDateTime.now())
                 .build();

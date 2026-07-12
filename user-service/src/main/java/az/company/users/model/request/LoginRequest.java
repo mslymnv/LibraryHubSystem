@@ -11,8 +11,8 @@ import static az.company.users.exception.constants.ApplicationConstants.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginRequest {
-    @NotBlank(message = USERNAME_VALIDATIION)
+    @NotBlank(message = USERNAME_VALIDATION)
     private String username;
-    @NotBlank(message = PASSWORD_VALIDATIION)
+    @NotBlank(message = PASSWORD_VALIDATION)
     private String password;
 }

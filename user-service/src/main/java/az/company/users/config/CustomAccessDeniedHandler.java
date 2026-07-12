@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+import static jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+
 @Component
 @RequiredArgsConstructor
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
@@ -22,11 +24,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(SC_FORBIDDEN);
         response.setContentType("application/json");
 
         var responseBody = ErrorResponse.builder()
-                .code("FORBIDDEN")
+                .status(SC_FORBIDDEN)
                 .message("You do not have permission to access this resource")
                 .timestamp(LocalDateTime.now())
                 .build();

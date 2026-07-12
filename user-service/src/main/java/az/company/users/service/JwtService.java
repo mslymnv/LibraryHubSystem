@@ -1,6 +1,5 @@
 package az.company.users.service;
 
-import az.company.users.dao.entity.UserEntity;
 import az.company.users.security.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
