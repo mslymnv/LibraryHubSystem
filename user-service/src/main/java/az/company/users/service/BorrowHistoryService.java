@@ -1,9 +1,13 @@
 package az.company.users.service;
 
+import az.company.users.dao.entity.BorrowHistoryEntity;
 import az.company.users.dao.repository.BorrowHistoryRepository;
 import az.company.users.model.response.BorrowHistoryResponse;
+import az.company.users.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,17 +17,4 @@ import java.util.List;
 public class BorrowHistoryService {
     private final BorrowHistoryRepository borrowHistoryRepository;
 
-    public List<BorrowHistoryResponse> getBorrowHistory(Pageable pageable) {
-        return borrowHistoryRepository.findAll(pageable)
-                .stream()
-                .map(entity -> BorrowHistoryResponse.builder()
-                        .id(entity.getId())
-                        .bookId(entity.getBookId())
-                        .bookTitle(entity.getBookTitle())
-                        .borrowedAt(entity.getBorrowedAt())
-                        .returnedAt(entity.getReturnedAt())
-                        .status(entity.getStatus())
-                        .build())
-                .toList();
-    }
 }

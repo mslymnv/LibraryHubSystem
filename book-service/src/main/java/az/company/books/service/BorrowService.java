@@ -19,9 +19,13 @@ import az.company.books.model.response.BorrowResponse;
 import jakarta.transaction.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.support.SecurityWebApplicationContextUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,7 +41,7 @@ public class BorrowService {
 
     // region borrow Method
     @Transactional
-    public void borrow(BorrowBookRequest borrowBookRequest,Long userId) {
+    public void borrow(BorrowBookRequest borrowBookRequest,Long id) {
         var bookEntity = bookRepository.findById(borrowBookRequest.getBookId()).orElseThrow(() -> new NotFoundException(
                 BOOK_NOT_FOUND.name(),
                 format(BOOK_NOT_FOUND.getMessage(), borrowBookRequest.getBookId())
@@ -48,12 +52,14 @@ public class BorrowService {
                     format(CONFLICT.getMessage(), borrowBookRequest.getBookId())
             );
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         id = (Long) authentication.getPrincipal();
 
         bookEntity.setAvailableCopies(bookEntity.getAvailableCopies() - 1);
         bookRepository.save(bookEntity);
         var borrowEntity = BorrowEntity
                 .builder()
-                .userId(userId)
+                .userId(id)
                 .book(bookEntity)
                 .borrowedAt(now())
                 .dueDate(LocalDate.now().plusDays(14))
@@ -81,15 +87,17 @@ public class BorrowService {
 
     // region return book
     @Transactional
-    public void returnBook(Long id) {
-        var borrowEntity = borrowRepository.findById(id).orElseThrow(() -> new NotFoundException(
+    public void returnBook(Long bookId,Long userId) {
+        var borrowEntity = borrowRepository.findById(bookId).orElseThrow(() -> new NotFoundException(
                 BOOK_NOT_FOUND.name(),
-                format(BOOK_NOT_FOUND.getMessage(), id)
+                format(BOOK_NOT_FOUND.getMessage(), bookId)
         ));
         var bookEntity = bookRepository.findById(borrowEntity.getBook().getId()).orElseThrow(() -> new NotFoundException(
                 BOOK_NOT_FOUND.name(),
                 format(BOOK_NOT_FOUND.getMessage(), borrowEntity.getBook().getId())
         ));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userId = (Long) authentication.getPrincipal();
         bookEntity.setAvailableCopies(bookEntity.getAvailableCopies() + 1);
         bookRepository.save(bookEntity);
         borrowEntity.setStatus(RETURNED);
@@ -123,32 +131,39 @@ public class BorrowService {
     }
     //endregion
 
-//region check borrow status
+    //region check borrow status
     public void checkBorrowStatus() {
-        var list=borrowRepository.findAll();
-        for(var borrow:list){
-                            if (borrow.getDueDate().isBefore(LocalDate.now()) && borrow.getReturnedAt() == null) {
-                                borrow.setStatus(OVERDUE);
-                                borrowRepository.save(borrow);
-                                var event = BorrowEvent.builder()
-                                        .id(UUID.randomUUID().toString())
-                                        .userId(borrow.getUserId())
-                                        .bookId(borrow.getBook().getId())
-                                        .bookTitle(borrow.getBook().getTitle())
-                                        .borrowedAt(borrow.getBorrowedAt())
-                                        .returnedAt(borrow.getReturnedAt())
-                                        .status(borrow.getStatus())
-                                        .build();
+        var list = borrowRepository.findAll();
+        for (var borrow : list) {
+            if (borrow.getDueDate().isBefore(LocalDate.now()) && borrow.getReturnedAt() == null) {
+                borrow.setStatus(OVERDUE);
+                borrowRepository.save(borrow);
+                var event = BorrowEvent.builder()
+                        .id(UUID.randomUUID().toString())
+                        .userId(borrow.getUserId())
+                        .bookId(borrow.getBook().getId())
+                        .bookTitle(borrow.getBook().getTitle())
+                        .borrowedAt(borrow.getBorrowedAt())
+                        .returnedAt(borrow.getReturnedAt())
+                        .status(borrow.getStatus())
+                        .build();
 
-                                rabbitTemplate.convertAndSend(
-                                        BORROW_EXCHANGE,
-                                        BORROW_ROUTING_KEY,
-                                        event
-                                );
-                            }
-                        }
+                rabbitTemplate.convertAndSend(
+                        BORROW_EXCHANGE,
+                        BORROW_ROUTING_KEY,
+                        event
+                );
+            }
+        }
 
 
+    }
+    public Page<BorrowResponse> getBorrowsByUserId(Long userId, Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userId = (Long) authentication.getPrincipal();
+        return borrowRepository.findByUserId(userId, pageable).map(
+                BorrowMapper::mapBorrowEntityToBorrowResponse
+        );
     }
     //endregion
 }

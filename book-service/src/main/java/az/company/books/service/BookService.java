@@ -8,6 +8,7 @@ import az.company.books.model.enums.BookStatus;
 import az.company.books.model.request.CreateBookRequest;
 import az.company.books.model.request.UpdateBookRequest;
 import az.company.books.model.response.BookResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,10 +26,11 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+
 public class BookService {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
-
     @CacheEvict(value = "books", allEntries = true)
     public BookResponse createBook(CreateBookRequest createBookRequest) {
         var category = categoryRepository.findById(createBookRequest.getCategoryId())

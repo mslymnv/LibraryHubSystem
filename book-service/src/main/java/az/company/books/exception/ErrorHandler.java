@@ -15,24 +15,27 @@ public class ErrorHandler {
     @ResponseStatus(NOT_FOUND)
     public ErrorResponse handleException(NotFoundException exception) {
         return ErrorResponse.builder()
-                .code(exception.getCode())
-                .message(exception.getMessage())
+                .status(NOT_FOUND.value())
+                .message("Not Found")
+                .error(exception.getMessage())
                 .build();
     }
     @ExceptionHandler(Exception.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(Exception exception) {
         return ErrorResponse.builder()
-                .code("Internal Error")
-                .message(exception.getMessage())
+                .status(INTERNAL_SERVER_ERROR.value())
+                .message("Internal Server Error")
+                .error(exception.getMessage())
                 .build();
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse handleException(MethodArgumentNotValidException exception) {
         return ErrorResponse.builder()
-                .code("Validation Error")
-                .message(Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage())
+                .status(BAD_REQUEST.value())
+                .message("Bad Request")
+                .error(Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage())
                 .build();
     }
     @ExceptionHandler(ConflictException.class)
@@ -40,8 +43,9 @@ public class ErrorHandler {
     public ErrorResponse handleException(ConflictException exception) {
         return ErrorResponse
                 .builder()
-                .code(exception.getCode())
-                .message(exception.getMessage())
+                .status(CONFLICT.value())
+                .message("Conflict")
+                .error(exception.getMessage())
                 .build();
     }
 }

@@ -7,6 +7,7 @@ import az.company.users.security.UserPrincipal;
 import az.company.users.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,24 @@ public class UserController {
     }
     @GetMapping("/me/borrows")
     public List<BorrowHistoryResponse> getUserBorrows(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+
         return userService.getUserBorrowHistory(userPrincipal.getId());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{id}")
+    public UserResponse getUserById(@PathVariable Long id) {
+                return userService.getUserById(id);
+
+    }
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getAllUsers() {
+        return userService.getAllUsers();
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public void deleteUserById(@PathVariable Long id) {
+        userService.deleteUser(id);
+    }
 }

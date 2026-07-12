@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -22,19 +23,24 @@ public class BorrowController {
     @PostMapping
     @ResponseStatus(CREATED)
     public void borrow(@RequestBody BorrowBookRequest request,
-                       @AuthenticationPrincipal Long userId) {
+                       @AuthenticationPrincipal Long id) {
 
-        borrowService.borrow(request, userId);
+        borrowService.borrow(request,id);
     }
-    @PutMapping("/{id}/return")
-    public void returnBook(@PathVariable Long id) {
-        borrowService.returnBook(id);
+    @PutMapping("/{bookId}/return")
+    public void returnBook(@PathVariable Long bookId,@AuthenticationPrincipal Long userId) {
+        borrowService.returnBook(bookId,userId);
     }
-
+    @GetMapping("/my")
+    public Page<BorrowResponse> getMyBorrows(@AuthenticationPrincipal Long userId, Pageable pageable) {
+        return borrowService.getBorrowsByUserId(userId, pageable);
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public Page<BorrowResponse> getBorrows(Pageable pageable) {
         return borrowService.getBorrows(pageable);
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
 
     @PutMapping("/overdue")
     public void checkOverdue() {

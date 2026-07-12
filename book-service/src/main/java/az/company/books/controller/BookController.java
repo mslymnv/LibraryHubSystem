@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,22 +19,29 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RequestMapping("/v1/books")
 public class BookController {
+
     private final BookService bookService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     @ResponseStatus(CREATED)
     public BookResponse createBook(@Valid @RequestBody CreateBookRequest createBookRequest) {
         return bookService.createBook(createBookRequest);
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update")
     public BookResponse updateBook(@Valid @RequestBody UpdateBookRequest updateBookRequest) {
         return bookService.updateBook(updateBookRequest);
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
     }
+
     @GetMapping
     @ResponseStatus(OK)
     public Page<BookResponse> getBooks(Pageable pageable,
@@ -41,11 +49,13 @@ public class BookController {
                                        @RequestParam(required = false) String author) {
         return bookService.getBooks(pageable, categoryId, author);
     }
+
     @GetMapping("/{id}")
     @ResponseStatus(OK)
     public BookResponse getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
+
     @GetMapping("/search")
     @ResponseStatus(OK)
     public List<BookResponse> getBooksByAuthorOrTitle(@RequestParam(required = false) String author,

@@ -7,6 +7,7 @@ import az.company.books.mapper.CategoryMapper;
 import az.company.books.model.request.CreateCategoryRequest;
 import az.company.books.model.request.UpdateCategoryRequest;
 import az.company.books.model.response.CategoryResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,6 +21,7 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     public CategoryResponse createCategory(CreateCategoryRequest createCategoryRequest) {

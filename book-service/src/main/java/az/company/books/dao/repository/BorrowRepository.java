@@ -14,4 +14,5 @@ public interface BorrowRepository extends JpaRepository<BorrowEntity,Long> {
     @Override
 @EntityGraph(attributePaths = {"book"})
     Page<BorrowEntity> findAll( Pageable pageable);
+    Page<BorrowEntity> findByUserId(Long userId, Pageable pageable);
 }
