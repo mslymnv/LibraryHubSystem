@@ -1,6 +1,7 @@
 package az.company.books.service;
 
 import az.company.books.dao.repository.CategoryRepository;
+import az.company.books.exception.CategoryAlreadyCreatedException;
 import az.company.books.exception.NotFoundException;
 import az.company.books.exception.enums.ErrorStatus;
 import az.company.books.mapper.CategoryMapper;
@@ -25,6 +26,12 @@ import static java.lang.String.format;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     public CategoryResponse createCategory(CreateCategoryRequest createCategoryRequest) {
+        if(categoryRepository.findByName(createCategoryRequest.getName()).isPresent()) {
+            throw new CategoryAlreadyCreatedException(
+                    CATEGORY_ALREADY_CREATED.name(),
+                    format(CATEGORY_ALREADY_CREATED.getMessage(), createCategoryRequest.getName())
+            );
+        }
         var entity = mapCategoryRequestToCategoryEntity(createCategoryRequest);
         categoryRepository.save(entity);
         return mapCategoryEntityToCategoryResponse(entity);

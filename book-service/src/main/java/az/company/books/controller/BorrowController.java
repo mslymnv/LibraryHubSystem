@@ -6,9 +6,7 @@ import az.company.books.service.BorrowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +20,10 @@ public class BorrowController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public void borrow(@RequestBody BorrowBookRequest request,
+    public BorrowResponse borrow(@RequestBody BorrowBookRequest request,
                        @AuthenticationPrincipal Long id) {
 
-        borrowService.borrow(request,id);
+       return borrowService.borrow(request,id);
     }
     @PutMapping("/{bookId}/return")
     public void returnBook(@PathVariable Long bookId,@AuthenticationPrincipal Long userId) {
@@ -40,11 +38,7 @@ public class BorrowController {
     public Page<BorrowResponse> getBorrows(Pageable pageable) {
         return borrowService.getBorrows(pageable);
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
 
-    @PutMapping("/overdue")
-    public void checkOverdue() {
-        borrowService.checkBorrowStatus();
-    }
+
 }
 

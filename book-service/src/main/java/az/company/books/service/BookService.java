@@ -2,6 +2,7 @@ package az.company.books.service;
 
 import az.company.books.dao.repository.BookRepository;
 import az.company.books.dao.repository.CategoryRepository;
+import az.company.books.exception.BookAlreadyCreatedException;
 import az.company.books.exception.NotFoundException;
 import az.company.books.mapper.BookMapper;
 import az.company.books.model.enums.BookStatus;
@@ -48,9 +49,9 @@ public class BookService {
                 .findFirst()
                 .ifPresent(
                         bookResponse -> {
-                            throw new NotFoundException(
+                            throw new BookAlreadyCreatedException(
                                     BOOK_ALREADY_EXISTS.name(),
-                                    BOOK_ALREADY_EXISTS.getMessage()
+                                    format(BOOK_ALREADY_EXISTS.getMessage(), createBookRequest.getTitle(), createBookRequest.getAuthor())
 
                             );
                         }

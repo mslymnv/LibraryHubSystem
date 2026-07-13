@@ -7,7 +7,8 @@ CREATE TABLE users
     full_name  VARCHAR(255),
     status     VARCHAR(50)  NOT NULL,
     created_at TIMESTAMP    NOT NULL,
-    updated_at TIMESTAMP
+    updated_at TIMESTAMP,
+    last_login_at TIMESTAMP
 );
 
 CREATE TABLE user_roles

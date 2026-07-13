@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static java.time.LocalDateTime.*;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.*;
@@ -16,10 +17,12 @@ public class ErrorHandler {
     public ErrorResponse handleException(NotFoundException exception) {
         return ErrorResponse.builder()
                 .status(NOT_FOUND.value())
-                .message("Not Found")
+                .message(exception.getCode())
                 .error(exception.getMessage())
+                .timestamp(now())
                 .build();
     }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(Exception exception) {
@@ -27,8 +30,10 @@ public class ErrorHandler {
                 .status(INTERNAL_SERVER_ERROR.value())
                 .message("Internal Server Error")
                 .error(exception.getMessage())
+                .timestamp(now())
                 .build();
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse handleException(MethodArgumentNotValidException exception) {
@@ -36,16 +41,55 @@ public class ErrorHandler {
                 .status(BAD_REQUEST.value())
                 .message("Bad Request")
                 .error(Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage())
+                .timestamp(now())
                 .build();
     }
+
     @ExceptionHandler(ConflictException.class)
     @ResponseStatus(CONFLICT)
     public ErrorResponse handleException(ConflictException exception) {
         return ErrorResponse
                 .builder()
                 .status(CONFLICT.value())
-                .message("Conflict")
+                .message(exception.getCode())
                 .error(exception.getMessage())
+                .timestamp(now())
+                .build();
+    }
+
+    @ExceptionHandler(CategoryAlreadyCreatedException.class)
+    @ResponseStatus(CONFLICT)
+    public ErrorResponse handleException(CategoryAlreadyCreatedException exception) {
+        return ErrorResponse
+                .builder()
+                .status(CONFLICT.value())
+                .message(exception.getCode())
+                .error(exception.getMessage())
+                .timestamp(now())
+                .build();
+    }
+
+    @ExceptionHandler(BookAlreadyBorrowedException.class)
+    @ResponseStatus(CONFLICT)
+    public ErrorResponse handleException(BookAlreadyBorrowedException exception) {
+        return ErrorResponse
+                .builder()
+                .status(CONFLICT.value())
+                .message(exception.getCode())
+                .error(exception.getMessage())
+                .timestamp(now())
+                .build();
+    }
+
+    @ExceptionHandler(BookAlreadyCreatedException.class)
+    @ResponseStatus(CONFLICT)
+    public ErrorResponse handleException(BookAlreadyCreatedException exception) {
+        return ErrorResponse
+                .builder()
+                .status(CONFLICT.value())
+                .message(exception.getCode())
+                .error(exception.getMessage())
+                .timestamp(now())
                 .build();
     }
 }
