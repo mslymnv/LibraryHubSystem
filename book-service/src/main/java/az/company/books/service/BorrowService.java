@@ -72,9 +72,10 @@ public class BorrowService {
 
         borrowRepository.save(borrowEntity);
         var event = getBorrowEvent(borrowEntity);
+        event.setUserId(id);
         rabbitTemplate.convertAndSend(
-                BORROW_EXCHANGE,
-                BORROW_ROUTING_KEY,
+                BORROW_CREATED_EXCHANGE,
+                BORROW_CREATED_ROUTING_KEY,
                 event
         );
         return mapBorrowEntityToBorrowResponse(borrowEntity);
@@ -100,8 +101,8 @@ public class BorrowService {
         var event = getBorrowEvent(borrowEntity);
         event.setUserId(userId);
         rabbitTemplate.convertAndSend(
-                BORROW_EXCHANGE,
-                BORROW_ROUTING_KEY,
+                BORROW_UPDATE_EXCHANGE,
+                BORROW_UPDATE_ROUTING_KEY,
                 event
         );
 
@@ -132,8 +133,8 @@ public class BorrowService {
             var event = getBorrowEvent(borrow);
 event.setUserId(borrow.getUserId());
             rabbitTemplate.convertAndSend(
-                    BORROW_EXCHANGE,
-                    BORROW_ROUTING_KEY,
+                    BORROW_UPDATE_EXCHANGE,
+                    BORROW_UPDATE_ROUTING_KEY,
                     event
             );
         }

@@ -35,7 +35,7 @@ public class UpdateBookRequest {
     private Year publishedYear;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = Book_Status_Required)
+    @NotNull(message = Book_Status_Required)
     private BookStatus status;
 
     @NotNull(message = Book_Category_Id_Required)
