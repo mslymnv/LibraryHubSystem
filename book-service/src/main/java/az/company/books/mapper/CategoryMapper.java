@@ -3,23 +3,22 @@ package az.company.books.mapper;
 import az.company.books.dao.entity.CategoryEntity;
 import az.company.books.model.request.CreateCategoryRequest;
 import az.company.books.model.response.CategoryResponse;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.time.LocalDateTime;
+@Mapper(componentModel = "spring")
+public interface CategoryMapper {
+    @Mapping(target = "id",ignore = true)
+    @Mapping(target = "createdAt",ignore = true)
+    CategoryEntity mapCategoryRequestToCategoryEntity(CreateCategoryRequest request);
 
-public class CategoryMapper {
-    public static CategoryEntity mapCategoryRequestToCategoryEntity(CreateCategoryRequest request) {
-        return CategoryEntity.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .createdAt(LocalDateTime.now())
-                .build();
+    @AfterMapping
+    default void setCreatedAt(@MappingTarget CategoryEntity entity) {
+        entity.setCreatedAt(LocalDateTime.now());
     }
-    public static CategoryResponse mapCategoryEntityToCategoryResponse(CategoryEntity entity) {
-        return CategoryResponse.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .description(entity.getDescription())
-                .createdAt(entity.getCreatedAt())
-                .build();
-    }
+
+   CategoryResponse mapCategoryEntityToCategoryResponse(CategoryEntity entity) ;
 }

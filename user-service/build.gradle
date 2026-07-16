@@ -47,8 +47,7 @@ dependencies {  //spring boot
     //openapi
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.16'
 
-    //feign
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
 
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
@@ -69,8 +68,17 @@ dependencies {  //spring boot
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
 
+    //aop
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    //mapstruct
+
+    implementation("org.mapstruct:mapstruct:1.6.3")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
+    implementation("org.mapstruct:mapstruct-jdk8:1.6.3")
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+}
 
 
 dependencyManagement {

@@ -1,37 +1,37 @@
 package az.company.users.mapper;
 
 import az.company.users.dao.entity.UserEntity;
+import az.company.users.model.enums.UserRoles;
+import az.company.users.model.enums.UserStatus;
 import az.company.users.model.request.UserRegisterRequest;
 import az.company.users.model.response.UserResponse;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
+import java.time.LocalDateTime;
 import java.util.Set;
+@Mapper(componentModel = "spring")
+public interface UserMapper {
 
-import static az.company.users.model.enums.UserRoles.USER;
-import static az.company.users.model.enums.UserStatus.ACTIVE;
-import static java.time.LocalDateTime.now;
-public class UserMapper {
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "lastLoginAt", ignore = true)
+    @Mapping(target = "borrowHistory", ignore = true)
+    UserEntity toEntity(UserRegisterRequest request);
 
-    public static UserEntity mapUserRegisterRequestToUserEntity(UserRegisterRequest userRegisterRequest){
-        return UserEntity.builder()
-                .username(userRegisterRequest.getUsername())
-                .email(userRegisterRequest.getEmail())
-                .fullName(userRegisterRequest.getFullName())
-                .role(Set.of(USER))
-                .status(ACTIVE)
-                .createdAt(now())
-                .updatedAt(now())
-                .build();
+    @Mapping(source = "role", target = "roles")
+    UserResponse toResponse(UserEntity entity);
 
-    }
-    public static UserResponse mapUserEntityToUserResponse(UserEntity userEntity){
-        return UserResponse.builder()
-                .id(userEntity.getId())
-                .username(userEntity.getUsername())
-                .email(userEntity.getEmail())
-                .fullName(userEntity.getFullName())
-                .createdAt(userEntity.getCreatedAt())
-                .roles(userEntity.getRole())
-                .status(userEntity.getStatus())
-                .build();
+    @AfterMapping
+    default void setDefaults(@MappingTarget UserEntity userEntity) {
+        userEntity.setRole(Set.of(UserRoles.USER));
+        userEntity.setStatus(UserStatus.ACTIVE);
+        userEntity.setCreatedAt(LocalDateTime.now());
+        userEntity.setUpdatedAt(LocalDateTime.now());
     }
 }

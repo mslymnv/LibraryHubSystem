@@ -13,7 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import az.company.books.service.JwtService;
+import az.company.books.security.service.JwtService;
 
 import java.time.LocalDateTime;
 import java.util.List;

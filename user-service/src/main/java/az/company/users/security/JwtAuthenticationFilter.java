@@ -1,7 +1,7 @@
 package az.company.users.security;
 
-import az.company.users.service.JwtService;
-import az.company.users.service.TokenStorageService;
+import az.company.users.security.service.JwtService;
+import az.company.users.security.service.TokenStorageService;
 import az.company.users.service.CustomUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

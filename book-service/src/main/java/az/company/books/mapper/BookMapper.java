@@ -1,51 +1,41 @@
 package az.company.books.mapper;
 
 import az.company.books.dao.entity.BookEntity;
-import az.company.books.dao.entity.CategoryEntity;
-import az.company.books.model.enums.BookStatus;
 import az.company.books.model.request.CreateBookRequest;
 import az.company.books.model.response.BookResponse;
-import org.hibernate.validator.constraints.ISBN;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static az.company.books.model.enums.BookStatus.ACTIVE;
 import static java.time.LocalDateTime.now;
 
-public class BookMapper {
-    public static BookEntity mapBookRequestToBookEntity(CreateBookRequest createBookRequest) {
-        return BookEntity.builder()
-                .title(createBookRequest.getTitle())
-                .author(createBookRequest.getAuthor())
-                .isbn(UUID.randomUUID().toString())
-                .description(createBookRequest.getDescription())
-                .totalCopies(createBookRequest.getTotalCopies())
-                .availableCopies(createBookRequest.getTotalCopies())
-                .publishedYear(createBookRequest.getPublishedYear())
-                .status(ACTIVE)
-                .createdAt(now())
-                .updatedAt(now())
-                .build();
+@Mapper(componentModel = "spring")
+public interface BookMapper {
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "isbn", ignore = true)
+    @Mapping(target = "availableCopies", source = "totalCopies")
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    BookEntity mapBookRequestToBookEntity(CreateBookRequest createBookRequest);
+
+    @AfterMapping
+    default void setDefaults(@MappingTarget BookEntity bookEntity) {
+
+        bookEntity.setIsbn(UUID.randomUUID().toString());
+        bookEntity.setStatus(ACTIVE);
+        bookEntity.setCreatedAt(now());
+        bookEntity.setUpdatedAt(now());
 
 
     }
 
-    public static BookResponse mapBookEntityToBookResponse(BookEntity bookEntity) {
-        return BookResponse.builder()
-                .id(bookEntity.getId())
-                .title(bookEntity.getTitle())
-                .author(bookEntity.getAuthor())
-                .isbn(bookEntity.getIsbn())
-                .description(bookEntity.getDescription())
-                .totalCopies(bookEntity.getTotalCopies())
-                .availableCopies(bookEntity.getAvailableCopies())
-                .publishedYear(bookEntity.getPublishedYear())
-                .createdAt(bookEntity.getCreatedAt())
-                .updatedAt(bookEntity.getUpdatedAt())
-                .status(bookEntity.getStatus())
-                .categoryName(bookEntity.getCategory().getName())
-                .build();
-    }
+    @Mapping(target = "categoryName", source = "category.name")
+    BookResponse mapBookEntityToBookResponse(BookEntity bookEntity);
+
 
 }

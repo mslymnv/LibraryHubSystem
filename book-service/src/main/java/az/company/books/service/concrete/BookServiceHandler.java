@@ -1,14 +1,14 @@
-package az.company.books.service;
+package az.company.books.service.concrete;
 
 import az.company.books.dao.repository.BookRepository;
 import az.company.books.dao.repository.CategoryRepository;
 import az.company.books.exception.BookAlreadyCreatedException;
 import az.company.books.exception.NotFoundException;
 import az.company.books.mapper.BookMapper;
-import az.company.books.model.enums.BookStatus;
 import az.company.books.model.request.CreateBookRequest;
 import az.company.books.model.request.UpdateBookRequest;
 import az.company.books.model.response.BookResponse;
+import az.company.books.service.abstraction.BookService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -29,10 +29,13 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 @Transactional
 
-public class BookService {
+public class BookServiceHandler implements BookService {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
+    private final BookMapper bookMapper;
+
     @CacheEvict(value = "books", allEntries = true)
+    @Override
     public BookResponse createBook(CreateBookRequest createBookRequest) {
         var category = categoryRepository.findById(createBookRequest.getCategoryId())
                 .orElseThrow(
@@ -43,7 +46,7 @@ public class BookService {
                 );
 
 
-        var bookEntity = mapBookRequestToBookEntity(createBookRequest);
+        var bookEntity = bookMapper.mapBookRequestToBookEntity(createBookRequest);
         getBooksByAuthorOrTitle(createBookRequest.getAuthor(), createBookRequest.getTitle())
                 .stream()
                 .findFirst()
@@ -59,10 +62,11 @@ public class BookService {
 
         bookEntity.setCategory(category);
         bookRepository.save(bookEntity);
-        return mapBookEntityToBookResponse(bookEntity);
+        return bookMapper.mapBookEntityToBookResponse(bookEntity);
     }
 
     @CacheEvict(value = "books", allEntries = true)
+    @Override
     public BookResponse updateBook(UpdateBookRequest updateBookRequest) {
         var entity = bookRepository.findById(updateBookRequest.getId())
                 .orElseThrow(
@@ -86,10 +90,11 @@ public class BookService {
         );
         entity.setCategory(category);
         bookRepository.save(entity);
-        return mapBookEntityToBookResponse(entity);
+        return bookMapper.mapBookEntityToBookResponse(entity);
     }
 
     @CacheEvict(value = "books", allEntries = true)
+    @Override
     public void deleteBook(Long id) {
         var entity = bookRepository.findById(id)
                 .orElseThrow(
@@ -102,9 +107,10 @@ public class BookService {
         bookRepository.save(entity);
     }
 
+    @Override
     public Page<BookResponse> getBooks(Pageable pageable, Long categoryId, String author) {
         return bookRepository.findAllBooks(pageable, categoryId, author)
-                .map(BookMapper::mapBookEntityToBookResponse);
+                .map(bookMapper::mapBookEntityToBookResponse);
     }
 
     @Cacheable(value = "books", key = "#id")
@@ -116,13 +122,14 @@ public class BookService {
                                 format(BOOK_NOT_FOUND.getMessage(), id)
                         )
                 );
-        return mapBookEntityToBookResponse(entity);
+        return bookMapper.mapBookEntityToBookResponse(entity);
     }
 
+    @Override
     public List<BookResponse> getBooksByAuthorOrTitle(String author, String title) {
         return bookRepository.findAllBooksByAuthorOrTitle(author, title)
                 .stream()
-                .map(BookMapper::mapBookEntityToBookResponse)
+                .map(bookMapper::mapBookEntityToBookResponse)
                 .toList();
     }
 

@@ -1,4 +1,4 @@
-package az.company.books.service;
+package az.company.books.service.concrete;
 
 import az.company.books.dao.entity.BorrowEntity;
 import az.company.books.dao.repository.BookRepository;
@@ -6,41 +6,41 @@ import az.company.books.dao.repository.BorrowRepository;
 import az.company.books.exception.BookAlreadyBorrowedException;
 import az.company.books.exception.ConflictException;
 import az.company.books.exception.NotFoundException;
-
-import static az.company.books.config.RabbitMQConfig.*;
-import static az.company.books.exception.enums.ErrorStatus.*;
-import static az.company.books.mapper.BorrowMapper.mapBorrowEntityToBorrowResponse;
-import static az.company.books.model.enums.BorrowStatus.*;
-import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
-
 import az.company.books.mapper.BorrowMapper;
 import az.company.books.model.dto.BorrowEvent;
 import az.company.books.model.request.BorrowBookRequest;
 import az.company.books.model.response.BorrowResponse;
+import az.company.books.service.abstraction.BorrowService;
 import jakarta.transaction.Transactional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static az.company.books.config.RabbitMQConfig.*;
+import static az.company.books.config.RabbitMQConfig.BORROW_UPDATE_EXCHANGE;
+import static az.company.books.config.RabbitMQConfig.BORROW_UPDATE_ROUTING_KEY;
+import static az.company.books.exception.enums.ErrorStatus.*;
+import static az.company.books.exception.enums.ErrorStatus.BOOK_NOT_FOUND;
+import static az.company.books.model.enums.BorrowStatus.*;
+import static java.lang.String.format;
+import static java.time.LocalDateTime.now;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-
-public class BorrowService {
+@RequiredArgsConstructor
+public class BorrowServiceHandler implements BorrowService {
     private final BorrowRepository borrowRepository;
     private final BookRepository bookRepository;
     private final RabbitTemplate rabbitTemplate;
+    private final BorrowMapper borrowMapper;
 
     // region borrow Method
+    @Override
     public BorrowResponse borrow(BorrowBookRequest borrowBookRequest, Long id) {
         var bookEntity = bookRepository.findById(borrowBookRequest.getBookId()).orElseThrow(() -> new NotFoundException(
                 BOOK_NOT_FOUND.name(),
@@ -78,12 +78,13 @@ public class BorrowService {
                 BORROW_CREATED_ROUTING_KEY,
                 event
         );
-        return mapBorrowEntityToBorrowResponse(borrowEntity);
+        return borrowMapper.mapBorrowEntityToBorrowResponse(borrowEntity);
 
     }
 // endregion
 
     // region return book
+    @Override
     public void returnBook(Long borrowId, Long userId) {
         var borrowEntity = borrowRepository.findById(borrowId).orElseThrow(() -> new NotFoundException(
                 BORROW_NOT_FOUND.name(),
@@ -110,16 +111,17 @@ public class BorrowService {
     // endregion
 
     // region get borrows
+    @Override
     public Page<BorrowResponse> getBorrows(Pageable pageable) {
         return borrowRepository.findAll(pageable).map(
-                BorrowMapper::mapBorrowEntityToBorrowResponse
+                borrowMapper::mapBorrowEntityToBorrowResponse
         );
 
     }
     //endregion
 
     //region check borrow status
-    @Scheduled(cron = "10 * * * * *",zone = "Asia/Baku")
+//    @Scheduled(cron = "10 * * * * *",zone = "Asia/Baku")
     public void checkBorrowStatus() {
         var list = borrowRepository.findAll().stream()
                 .filter(
@@ -131,7 +133,7 @@ public class BorrowService {
 
             borrow.setStatus(OVERDUE);
             var event = getBorrowEvent(borrow);
-event.setUserId(borrow.getUserId());
+            event.setUserId(borrow.getUserId());
             rabbitTemplate.convertAndSend(
                     BORROW_UPDATE_EXCHANGE,
                     BORROW_UPDATE_ROUTING_KEY,
@@ -157,9 +159,8 @@ event.setUserId(borrow.getUserId());
 
     public Page<BorrowResponse> getBorrowsByUserId(Long userId, Pageable pageable) {
         return borrowRepository.findByUserId(userId, pageable).map(
-                BorrowMapper::mapBorrowEntityToBorrowResponse
+                borrowMapper::mapBorrowEntityToBorrowResponse
         );
     }
     //endregion
 }
-

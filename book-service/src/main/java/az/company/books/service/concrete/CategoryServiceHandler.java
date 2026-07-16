@@ -1,17 +1,15 @@
-package az.company.books.service;
+package az.company.books.service.concrete;
 
 import az.company.books.dao.repository.CategoryRepository;
 import az.company.books.exception.CategoryAlreadyCreatedException;
 import az.company.books.exception.NotFoundException;
-import az.company.books.exception.enums.ErrorStatus;
 import az.company.books.mapper.CategoryMapper;
 import az.company.books.model.request.CreateCategoryRequest;
 import az.company.books.model.request.UpdateCategoryRequest;
 import az.company.books.model.response.CategoryResponse;
+import az.company.books.service.abstraction.CategoryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +21,10 @@ import static java.lang.String.format;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CategoryService {
+public class CategoryServiceHandler implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
+    @Override
     public CategoryResponse createCategory(CreateCategoryRequest createCategoryRequest) {
         if(categoryRepository.findByName(createCategoryRequest.getName()).isPresent()) {
             throw new CategoryAlreadyCreatedException(
@@ -32,10 +32,11 @@ public class CategoryService {
                     format(CATEGORY_ALREADY_CREATED.getMessage(), createCategoryRequest.getName())
             );
         }
-        var entity = mapCategoryRequestToCategoryEntity(createCategoryRequest);
+        var entity = categoryMapper.mapCategoryRequestToCategoryEntity(createCategoryRequest);
         categoryRepository.save(entity);
-        return mapCategoryEntityToCategoryResponse(entity);
+        return categoryMapper.mapCategoryEntityToCategoryResponse(entity);
     }
+    @Override
     public CategoryResponse updateCategory(UpdateCategoryRequest updateCategoryRequest) {
         var entity = categoryRepository.findById(updateCategoryRequest.getCategoryId())
                 .orElseThrow(
@@ -45,8 +46,9 @@ public class CategoryService {
                         ));
         entity.setDescription(updateCategoryRequest.getDescription());
         categoryRepository.save(entity);
-        return mapCategoryEntityToCategoryResponse(entity);
+        return categoryMapper.mapCategoryEntityToCategoryResponse(entity);
     }
+    @Override
     public void deleteCategory(Long id) {
         var entity = categoryRepository.findById(id)
                 .orElseThrow(
@@ -57,12 +59,14 @@ public class CategoryService {
                 );
         categoryRepository.delete(entity);
     }
+    @Override
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll()
                 .stream()
-                .map(CategoryMapper::mapCategoryEntityToCategoryResponse)
+                .map(categoryMapper::mapCategoryEntityToCategoryResponse)
                 .toList();
     }
+    @Override
     public CategoryResponse getCategoryById(Long id) {
         var entity = categoryRepository.findById(id)
                 .orElseThrow(
@@ -71,6 +75,6 @@ public class CategoryService {
                                 format(CATEGORY_NOT_FOUND.getMessage(), id)
                         )
                 );
-        return mapCategoryEntityToCategoryResponse(entity);
+        return categoryMapper.mapCategoryEntityToCategoryResponse(entity);
     }
 }
