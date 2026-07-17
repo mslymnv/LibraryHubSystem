@@ -31,7 +31,6 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
     }
-    //extract id
     public Long extractUserId(String token) {
         return extractAllClaims(token).get("userId", Long.class);
     }

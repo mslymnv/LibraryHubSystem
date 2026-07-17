@@ -2,8 +2,25 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.16'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'groovy'
+    id 'jacoco'
 }
 
+jacoco {
+    toolVersion = "0.8.13"
+}
+
+
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        html.required = true
+        xml.required = true
+        csv.required = false
+    }
+}
 group = 'az.company'
 version = '0.0.1-SNAPSHOT'
 description = 'book-service'
@@ -81,6 +98,9 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
     implementation("org.mapstruct:mapstruct-jdk8:1.6.3")
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+
+    //spock groovty
+    testImplementation "org.spockframework:spock-core:2.3-groovy-4.0"
 }
 
 
@@ -92,4 +112,5 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }

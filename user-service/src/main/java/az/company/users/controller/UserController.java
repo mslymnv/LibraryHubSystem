@@ -4,7 +4,7 @@ import az.company.users.model.request.UpdateProfilRequest;
 import az.company.users.model.response.BorrowHistoryResponse;
 import az.company.users.model.response.UserResponse;
 import az.company.users.security.UserPrincipal;
-import az.company.users.service.UserServiceHandler;
+import az.company.users.service.concrete.UserServiceHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

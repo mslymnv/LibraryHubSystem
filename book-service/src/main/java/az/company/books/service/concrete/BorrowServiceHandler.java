@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -121,7 +122,7 @@ public class BorrowServiceHandler implements BorrowService {
     //endregion
 
     //region check borrow status
-//    @Scheduled(cron = "10 * * * * *",zone = "Asia/Baku")
+    @Scheduled(cron = "0 0 0 * * MON",zone = "Asia/Baku")
     public void checkBorrowStatus() {
         var list = borrowRepository.findAll().stream()
                 .filter(

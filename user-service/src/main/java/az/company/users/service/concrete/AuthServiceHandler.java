@@ -14,7 +14,6 @@ import az.company.users.model.response.UserResponse;
 import az.company.users.security.UserPrincipal;
 import az.company.users.security.service.JwtService;
 import az.company.users.security.service.TokenStorageService;
-import az.company.users.service.CustomUserDetailsService;
 import az.company.users.service.abstraction.AuthService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

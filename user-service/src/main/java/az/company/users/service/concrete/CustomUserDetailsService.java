@@ -1,4 +1,4 @@
-package az.company.users.service;
+package az.company.users.service.concrete;
 
 import az.company.users.dao.entity.UserEntity;
 import az.company.users.dao.repository.UserRepository;

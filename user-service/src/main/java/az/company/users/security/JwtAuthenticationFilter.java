@@ -2,7 +2,7 @@ package az.company.users.security;
 
 import az.company.users.security.service.JwtService;
 import az.company.users.security.service.TokenStorageService;
-import az.company.users.service.CustomUserDetailsService;
+import az.company.users.service.concrete.CustomUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
