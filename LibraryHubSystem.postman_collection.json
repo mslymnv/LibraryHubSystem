@@ -1,0 +1,796 @@
+{
+	"info": {
+		"_postman_id": "8f4f7458-4528-4997-8561-8e3b08047f45",
+		"name": "LibraryHubSystem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50102566"
+	},
+	"item": [
+		{
+			"name": "user-service",
+			"item": [
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "GetMe",
+							"request": {
+								"auth": {
+									"type": "jwt",
+									"jwt": [
+										{
+											"key": "algorithm",
+											"value": "HS256",
+											"type": "string"
+										},
+										{
+											"key": "isSecretBase64Encoded",
+											"value": false,
+											"type": "boolean"
+										},
+										{
+											"key": "payload",
+											"value": "{}",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "headerPrefix",
+											"value": "Bearer",
+											"type": "string"
+										},
+										{
+											"key": "queryParamKey",
+											"value": "token",
+											"type": "string"
+										},
+										{
+											"key": "header",
+											"value": "{}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/v1/users/me",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"v1",
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateUser",
+							"request": {
+								"auth": {
+									"type": "jwt",
+									"jwt": [
+										{
+											"key": "algorithm",
+											"value": "HS256",
+											"type": "string"
+										},
+										{
+											"key": "isSecretBase64Encoded",
+											"value": false,
+											"type": "boolean"
+										},
+										{
+											"key": "payload",
+											"value": "{}",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										},
+										{
+											"key": "headerPrefix",
+											"value": "Bearer",
+											"type": "string"
+										},
+										{
+											"key": "queryParamKey",
+											"value": "token",
+											"type": "string"
+										},
+										{
+											"key": "header",
+											"value": "{}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"fullName\": \"Memmed Suleymanov\",\n  \"email\": \"memmedsuleymanov61@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/v1/users/me",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"v1",
+										"users",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetMyBorrows",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/v1/users/me/borrows",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"v1",
+										"users",
+										"me",
+										"borrows"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetUserById",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/v1/users/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"v1",
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetAllUsers",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/v1/users",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"v1",
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"mslymnv21\",\n  \"email\": \"memmedsuleymanov61@gmail.com\",\n  \"password\": \"123qwe123\",\n  \"fullName\": \"Memmed Suleyman\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/v1/auth/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"v1",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "LogIn",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"mslymnv21\",\n  \"password\": \"123qwe123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/v1/auth/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "book-service",
+			"item": [
+				{
+					"name": "categories",
+					"item": [
+						{
+							"name": "CreateCategory",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Tarixi\",\n  \"description\": \"Qedim dovrden gunumuze qeder\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8082/v1/categories",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateCategory",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"categoryId\": 1,\n  \"description\": \"Dunya ve Azerbaycan Tarixi\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8082/v1/categories/update",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"categories",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteCategory",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8082/v1/categories/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"categories",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetCategoryById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/v1/categories/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"categories",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetAllCategories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/v1/categories",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "books",
+					"item": [
+						{
+							"name": "CreateBook",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Caldiran Doyusu\",\n  \"author\": \"Ferman Kerimzade\",\n  \"description\": \"Sefeviler Dovletini ile Osmanli Imperiyasinin en yadda qalan tarixi munasibetlerini eks etdiren mukemmel roman.\",\n  \"isbn\": \"1239297\",\n  \"totalCopies\": 20,\n  \"publishedYear\": 2003,\n  \"categoryId\": 2\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8082/v1/books",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"books"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateBook",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": 2,\n  \"title\": \"Caldiran Doyusu\",\n  \"author\": \"Ferman Kerimzade\",\n  \"description\": \"1514cu il\",\n  \"totalCopies\": 30,\n  \"publishedYear\": 2005,\n  \"status\": \"ACTIVE\",\n  \"categoryId\": 2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8082/v1/books/update",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"books",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteBook",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8082/v1/books/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"books",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetBooks",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/v1/books?page=0&size=5&sort=title,asc&categoryId=1&author=Ferman%20Kerimzade",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"books"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "5"
+										},
+										{
+											"key": "sort",
+											"value": "title,asc"
+										},
+										{
+											"key": "categoryId",
+											"value": "1"
+										},
+										{
+											"key": "author",
+											"value": "Ferman%20Kerimzade"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetBookById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/v1/books/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"books",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetBooksByAuthorOrTitle",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/v1/books/search?title=Xudaferin%20Korpusu&author=Ferman%20Kerimzade",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"books",
+										"search"
+									],
+									"query": [
+										{
+											"key": "title",
+											"value": "Xudaferin%20Korpusu"
+										},
+										{
+											"key": "author",
+											"value": "Ferman%20Kerimzade"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "borrows",
+					"item": [
+						{
+							"name": "Borrow",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bookId\": 3\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8082/v1/borrows",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"borrows"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Return",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8082/v1/borrows/1/return",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"borrows",
+										"1",
+										"return"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetBorrows",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8082/v1/borrows?page=0&size=5&sort=id,asc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"borrows"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "5"
+										},
+										{
+											"key": "sort",
+											"value": "id,asc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetMyBorrows",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtc2x5bW52MjEiLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwidXNlcklkIjoxLCJpYXQiOjE3ODQzODE0MTAsImV4cCI6MTc4NDM4MjMxMH0.XcSY1AnW-GwP1hi7NBO7J4MRTftdCyzRB7YIr_J7w-w",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8082/v1/borrows/my",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"v1",
+										"borrows",
+										"my"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
