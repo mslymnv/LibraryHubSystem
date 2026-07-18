@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
     @Query
@@ -21,7 +22,7 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
     Page<BookEntity> findAllBooks(Pageable pageable, Long categoryId, String author);
 
 
-@EntityGraph(attributePaths = {"category"})
+    @EntityGraph(attributePaths = {"category"})
     @Query
             ("""
                     SELECT b FROM BookEntity b
@@ -29,4 +30,6 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
                     AND (b.title = :title OR :title IS NULL)
                     """)
     List<BookEntity> findAllBooksByAuthorOrTitle(String author, String title);
+
+    Optional<BookEntity> findByIsbn(String isbn);
 }

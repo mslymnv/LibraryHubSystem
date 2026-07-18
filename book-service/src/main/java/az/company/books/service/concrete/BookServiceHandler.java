@@ -3,6 +3,7 @@ package az.company.books.service.concrete;
 import az.company.books.dao.repository.BookRepository;
 import az.company.books.dao.repository.CategoryRepository;
 import az.company.books.exception.BookAlreadyCreatedException;
+import az.company.books.exception.IsbnAlreadyUsedException;
 import az.company.books.exception.NotFoundException;
 import az.company.books.mapper.BookMapper;
 import az.company.books.model.request.CreateBookRequest;
@@ -21,7 +22,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static az.company.books.exception.enums.ErrorStatus.*;
-import static az.company.books.mapper.BookMapper.*;
 import static az.company.books.model.enums.BookStatus.*;
 import static java.lang.String.format;
 
@@ -47,6 +47,7 @@ public class BookServiceHandler implements BookService {
 
 
         var bookEntity = bookMapper.mapBookRequestToBookEntity(createBookRequest);
+
         getBooksByAuthorOrTitle(createBookRequest.getAuthor(), createBookRequest.getTitle())
                 .stream()
                 .findFirst()
@@ -59,9 +60,24 @@ public class BookServiceHandler implements BookService {
                             );
                         }
                 );
+        if(bookRepository.findByIsbn(bookEntity.getIsbn()).isPresent()){
+
+                    throw new IsbnAlreadyUsedException(
+                            ISBN_ALREADY_USED.name(),
+                            format(ISBN_ALREADY_USED.getMessage(),bookEntity.getIsbn()));
+                }
+
+
+        {
+
+
+
+        }
 
         bookEntity.setCategory(category);
+
         bookRepository.save(bookEntity);
+
         return bookMapper.mapBookEntityToBookResponse(bookEntity);
     }
 

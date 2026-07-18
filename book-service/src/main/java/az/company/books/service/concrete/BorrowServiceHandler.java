@@ -121,28 +121,6 @@ public class BorrowServiceHandler implements BorrowService {
     }
     //endregion
 
-    //region check borrow status
-    @Scheduled(cron = "0 0 0 * * MON",zone = "Asia/Baku")
-    public void checkBorrowStatus() {
-        var list = borrowRepository.findAll().stream()
-                .filter(
-                        borrow ->
-                                borrow.getDueDate().isBefore(LocalDate.now()) && borrow.getReturnedAt() == null
-                ).toList();
-
-        for (var borrow : list) {
-
-            borrow.setStatus(OVERDUE);
-            var event = getBorrowEvent(borrow);
-            event.setUserId(borrow.getUserId());
-            rabbitTemplate.convertAndSend(
-                    BORROW_UPDATE_EXCHANGE,
-                    BORROW_UPDATE_ROUTING_KEY,
-                    event
-            );
-        }
-    }
-
 
 
 
@@ -163,5 +141,5 @@ public class BorrowServiceHandler implements BorrowService {
                 borrowMapper::mapBorrowEntityToBorrowResponse
         );
     }
-    //endregion
+
 }

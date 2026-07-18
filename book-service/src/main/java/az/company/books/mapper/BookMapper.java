@@ -8,7 +8,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.util.UUID;
 
 import static az.company.books.model.enums.BookStatus.ACTIVE;
 import static java.time.LocalDateTime.now;
@@ -16,17 +15,17 @@ import static java.time.LocalDateTime.now;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "isbn", ignore = true)
     @Mapping(target = "availableCopies", source = "totalCopies")
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "borrows",ignore = true)
+    @Mapping(target = "category",ignore = true)
     BookEntity mapBookRequestToBookEntity(CreateBookRequest createBookRequest);
 
     @AfterMapping
     default void setDefaults(@MappingTarget BookEntity bookEntity) {
 
-        bookEntity.setIsbn(UUID.randomUUID().toString());
         bookEntity.setStatus(ACTIVE);
         bookEntity.setCreatedAt(now());
         bookEntity.setUpdatedAt(now());

@@ -5,6 +5,7 @@ import az.company.books.dao.entity.CategoryEntity
 import az.company.books.dao.repository.BookRepository
 import az.company.books.dao.repository.CategoryRepository
 import az.company.books.exception.BookAlreadyCreatedException
+import az.company.books.exception.IsbnAlreadyUsedException
 import az.company.books.exception.NotFoundException
 import az.company.books.mapper.BookMapper
 import az.company.books.model.enums.BookStatus
@@ -27,9 +28,9 @@ class BookServiceHandlerTest extends Specification {
     private BookServiceHandler bookServiceHandler
 
     def setup() {
-        bookRepository = Mock(BookRepository)
-        categoryRepository = Mock(CategoryRepository)
-        bookMapper = Mock(BookMapper)
+        bookRepository = Mock()
+        categoryRepository = Mock()
+        bookMapper = Mock()
 
         bookServiceHandler = new BookServiceHandler(
                 bookRepository,
@@ -44,6 +45,7 @@ class BookServiceHandlerTest extends Specification {
                 "Clean Code",
                 "Robert Martin",
                 "Programming",
+                "ISBN",
                 5,
                 Year.of(2008),
                 1L
@@ -57,7 +59,9 @@ class BookServiceHandlerTest extends Specification {
                 null
         )
 
-        def entity = new BookEntity()
+        def entity = new BookEntity(
+
+        )
         entity.title = request.title
         entity.author = request.author
         entity.description = request.description
@@ -68,11 +72,11 @@ class BookServiceHandlerTest extends Specification {
 
         when:
         def result = bookServiceHandler.createBook(request)
-
         then:
         1 * categoryRepository.findById(1L) >> Optional.of(category)
         1 * bookMapper.mapBookRequestToBookEntity(request) >> entity
-        1 * bookServiceHandler.getBooksByAuthorOrTitle(request.author, request.title) >> []
+        1 * bookRepository.findAllBooksByAuthorOrTitle(request.author, request.title) >> []
+        1 * bookRepository.findByIsbn(entity.getIsbn()) >> Optional.empty()
         1 * bookRepository.save(entity) >> entity
         1 * bookMapper.mapBookEntityToBookResponse(entity) >> response
 
@@ -85,6 +89,7 @@ class BookServiceHandlerTest extends Specification {
                 "Clean Code",
                 "Robert Martin",
                 "Programming",
+                "ISBN",
                 5,
                 Year.of(2008),
                 1L
@@ -99,12 +104,14 @@ class BookServiceHandlerTest extends Specification {
         thrown(NotFoundException)
     }
 
-    def "CreateBookShouldThrowWhenBookAlreadyExists"() {
+
+    def "CreateBookShouldThrowWhenBookAlreadyCreated"() {
         given:
         def request = new CreateBookRequest(
                 "Clean Code",
                 "Robert Martin",
                 "Programming",
+                "ISBN",
                 5,
                 Year.of(2008),
                 1L
@@ -125,9 +132,46 @@ class BookServiceHandlerTest extends Specification {
         then:
         1 * categoryRepository.findById(1L) >> Optional.of(category)
         1 * bookMapper.mapBookRequestToBookEntity(request) >> entity
-        1 * bookServiceHandler.getBooksByAuthorOrTitle(request.author, request.title) >> [response]
+        1 * bookRepository.findAllBooksByAuthorOrTitle(request.author, request.title) >> [entity]
+        1 * bookMapper.mapBookEntityToBookResponse(entity) >> response
 
         thrown(BookAlreadyCreatedException)
+    }
+
+    def "CreateBookShouldThrowWhenIsbnAlreadyUsed"() {
+        given:
+        def request = new CreateBookRequest(
+                "Clean Code",
+                "Robert Martin",
+                "Programming",
+                "ISBN",
+                5,
+                Year.of(2008),
+                1L
+        )
+
+        def category = new CategoryEntity()
+        category.id = 1L
+
+        def book = new BookEntity()
+        def bookInDb = new BookEntity()
+        book.setIsbn("ISBN")
+        bookInDb.setIsbn("ISBN")
+        def response = new BookResponse()
+        response.title = request.title
+        response.author = request.author
+
+        when:
+        bookServiceHandler.createBook(request)
+
+        then:
+        1 * categoryRepository.findById(1L) >> Optional.of(category)
+        1 * bookMapper.mapBookRequestToBookEntity(request) >> book
+        1 * bookRepository.findAllBooksByAuthorOrTitle(request.author, request.title) >> []
+        1 * bookRepository.findByIsbn(request.getIsbn()) >> Optional.of(bookInDb)
+
+
+        thrown(IsbnAlreadyUsedException)
     }
 
     def "UpdateBookShouldReturnUpdatedBook"() {

@@ -12,7 +12,8 @@ public enum ErrorStatus {
     CATEGORY_ALREADY_CREATED("Category already exists with name: %s"),
     BOOK_ALREADY_EXISTS("Book already exists with title and author: %s %s"),
     BORROW_ALREADY_EXISTS("You have already borrowed this book: %s"),
-    BORROW_NOT_FOUND("Borrow not found with id: %s");
+    BORROW_NOT_FOUND("Borrow not found with id: %s"),
+    ISBN_ALREADY_USED("This ISBN (%s) is already used");
 
     private final String message;
 

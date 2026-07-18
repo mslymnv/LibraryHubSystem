@@ -53,7 +53,6 @@ public class BorrowListener {
                 );
         borrowHistoryEntity.setReturnedAt(borrowEvent.getReturnedAt());
         borrowHistoryEntity.setStatus(borrowEvent.getStatus());
-        borrowHistoryRepository.save(borrowHistoryEntity);
     }
 
 }

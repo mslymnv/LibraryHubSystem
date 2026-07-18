@@ -10,7 +10,6 @@ import az.company.users.model.response.BorrowHistoryResponse;
 import az.company.users.model.response.UserResponse;
 import az.company.users.service.abstraction.UserService;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,7 +62,7 @@ public class UserServiceHandler implements UserService {
                 .toList();
     }
 
-    private @NonNull UserEntity getUserEntity(Long userId) {
+    private  UserEntity getUserEntity(Long userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException(USER_NOT_FOUND.name(),
                         format(USER_NOT_FOUND.getMessage(), userId)

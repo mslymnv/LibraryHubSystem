@@ -92,4 +92,15 @@ public class ErrorHandler {
                 .timestamp(now())
                 .build();
     }
+    @ExceptionHandler(IsbnAlreadyUsedException.class)
+    @ResponseStatus(CONFLICT)
+    public ErrorResponse handleException(IsbnAlreadyUsedException exception) {
+        return ErrorResponse
+                .builder()
+                .status(CONFLICT.value())
+                .message(exception.getCode())
+                .error(exception.getMessage())
+                .timestamp(now())
+                .build();
+    }
 }

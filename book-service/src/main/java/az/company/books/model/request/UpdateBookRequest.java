@@ -5,6 +5,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,7 @@ import static az.company.books.exception.constants.ApplicationConstants.*;
 @AllArgsConstructor
 public class UpdateBookRequest {
     @NotNull(message = Book_Id_Required)
+    @Positive(message =  Id_Numbers_Validation)
     private Long id;
 
     @NotBlank(message = Book_Title_Required)
@@ -28,6 +31,7 @@ public class UpdateBookRequest {
 
     @NotBlank(message = Book_Description_Required)
     private String description;
+    @PositiveOrZero(message =Copies_Numbers_Validation )
 
     @NotNull(message = Book_Total_Copies_Required)
     private Integer totalCopies;
@@ -39,6 +43,8 @@ public class UpdateBookRequest {
     private BookStatus status;
 
     @NotNull(message = Book_Category_Id_Required)
+    @Positive(message =  Id_Numbers_Validation)
+
     private Long categoryId;
 
 }

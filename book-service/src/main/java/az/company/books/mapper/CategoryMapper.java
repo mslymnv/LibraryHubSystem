@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public interface CategoryMapper {
     @Mapping(target = "id",ignore = true)
     @Mapping(target = "createdAt",ignore = true)
+    @Mapping(target = "books",ignore = true)
     CategoryEntity mapCategoryRequestToCategoryEntity(CreateCategoryRequest request);
 
     @AfterMapping

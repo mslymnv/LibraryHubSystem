@@ -16,4 +16,7 @@ public class ApplicationConstants {
     public static final String Book_Category_Id_Required = "Book category ID cannot be null";
     public static final String Book_Id_Required = "Book ID cannot be null";
     public static final String Book_Status_Required = "Book status cannot be null";
+    public static final String Copies_Numbers_Validation="Copies cannot be negative";
+    public static final String Id_Numbers_Validation="Id cannot be negative or zero";
+
 }
