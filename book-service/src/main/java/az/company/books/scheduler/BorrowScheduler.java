@@ -3,9 +3,11 @@ package az.company.books.scheduler;
 import az.company.books.dao.entity.BorrowEntity;
 import az.company.books.dao.repository.BorrowRepository;
 import az.company.books.model.dto.BorrowEvent;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -13,8 +15,9 @@ import java.util.UUID;
 import static az.company.books.config.RabbitMQConfig.BORROW_UPDATE_EXCHANGE;
 import static az.company.books.config.RabbitMQConfig.BORROW_UPDATE_ROUTING_KEY;
 import static az.company.books.model.enums.BorrowStatus.OVERDUE;
-
+@Service
 @RequiredArgsConstructor
+@Transactional
 public class BorrowScheduler {
     private final BorrowRepository borrowRepository;
     private final RabbitTemplate rabbitTemplate;
